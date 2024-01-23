@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Index</title>
+</head>
+<body>
+    <h1>File Index</h1>
+    <ul id="file-list"></ul>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchFileList();
+        });
+
+        async function fetchFileList() {
+            const response = await fetch('/.netlify/functions/getFiles'); // Replace with your own server or API endpoint
+            const files = await response.json();
+
+            generateIndex(files);
+        }
+
+        function generateIndex(files) {
+            const listContainer = document.getElementById('file-list');
+
+            files.forEach(file => {
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = file.link;
+                link.textContent = file.name;
+
+                listItem.appendChild(link);
+                listContainer.appendChild(listItem);
+            });
+        }
+    </script>
+</body>
+</html>
