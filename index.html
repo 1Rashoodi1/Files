@@ -15,10 +15,18 @@
         });
 
         async function fetchFileList() {
-            const response = await fetch('/.netlify/functions/getFiles'); // Replace with your own server or API endpoint
-            const files = await response.json();
+            try {
+                const response = await fetch('https://api.github.com/repos/1Rashoodi1/Files/contents/');
+                const files = await response.json();
 
-            generateIndex(files);
+                const filteredFiles = files
+                    .filter(file => file.type === 'file' && file.name !== 'file-list.json')
+                    .map(file => ({ name: file.name, link: file.download_url }));
+
+                generateIndex(filteredFiles);
+            } catch (error) {
+                console.error('Error fetching file list:', error);
+            }
         }
 
         function generateIndex(files) {
